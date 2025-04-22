@@ -13,6 +13,7 @@ export default function Index() {
       <Link href="/sign_in">Sign in</Link>
       <Link href="/explore">explore</Link>
       <Link href="/profile">profile</Link>
+      <Link href="/properties/1">Property</Link>
     </View>
   );
 }
