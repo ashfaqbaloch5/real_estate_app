@@ -10,6 +10,7 @@ import {
   } from "react-native-appwrite";
   import * as Linking from "expo-linking";
   import { openAuthSessionAsync } from "expo-web-browser";
+import { Alert } from "react-native";
   
   export const config = {
     platform: "com.jsm.restate",
@@ -44,26 +45,33 @@ import {
         OAuthProvider.Google,
         redirectUri
       );
-      if (!response) throw new Error("Create OAuth2 token failed");
+      if (!response) throw new Error("Failed to create OAuth2 token");
   
       const browserResult = await openAuthSessionAsync(
         response.toString(),
         redirectUri
       );
-      if (browserResult.type !== "success")
-        throw new Error("Create OAuth2 token failed");
+      if (browserResult.type !== "success") {
+        throw new Error("OAuth session was not successful");
+      }
   
       const url = new URL(browserResult.url);
       const secret = url.searchParams.get("secret")?.toString();
       const userId = url.searchParams.get("userId")?.toString();
-      if (!secret || !userId) throw new Error("Create OAuth2 token failed");
+  
+      if (!secret || !userId) {
+        throw new Error("Missing secret or userId from OAuth callback URL");
+      }
   
       const session = await account.createSession(userId, secret);
-      if (!session) throw new Error("Failed to create session");
+      if (!session) {
+        throw new Error("Failed to create user session after OAuth");
+      }
   
       return true;
     } catch (error) {
-      console.error(error);
+      console.error("OAuth Login failed", error);
+      Alert.alert("Login Error", error instanceof Error ? error.message : "Unknown error");
       return false;
     }
   }
