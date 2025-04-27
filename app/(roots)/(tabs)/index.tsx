@@ -5,12 +5,13 @@ import icons from "@/constants/icons";
 import images from "@/constants/images";
 import { useGlobalContext } from "@/lib/global-provider";
 import seed from "@/lib/seed";
-import { Link } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 import { Button, FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const {user}=useGlobalContext();
+  const params = useLocalSearchParams<{query?: string; filter?:string}>();
   return (
    <SafeAreaView className="bg-white h-full">
     
