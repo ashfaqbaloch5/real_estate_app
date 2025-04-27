@@ -3,15 +3,35 @@ import Filters from "@/components/Filters";
 import Search from "@/components/Search";
 import icons from "@/constants/icons";
 import images from "@/constants/images";
+import { getLatestProperties, getProperties } from "@/lib/appwrite";
 import { useGlobalContext } from "@/lib/global-provider";
 import seed from "@/lib/seed";
+import { useAppwrite } from "@/lib/useAppwrite";
 import { Link, useLocalSearchParams } from "expo-router";
+import { useEffect } from "react";
 import { Button, FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const {user}=useGlobalContext();
   const params = useLocalSearchParams<{query?: string; filter?:string}>();
+  const {data:latestProperties,loading:latestPropertiesloading}= useAppwrite({
+    fn: getLatestProperties
+  });
+  const {data,loading,refetch}=useAppwrite({
+    fn: getProperties,
+    params:{
+      filter: params.filter!,
+      query: params.query!,
+      limit:6
+    },
+    skip:true,
+  
+  })
+
+  useEffect(()=>{
+    
+  })
   return (
    <SafeAreaView className="bg-white h-full">
     
