@@ -2,7 +2,7 @@ import Search from "@/components/Search";
 import icons from "@/constants/icons";
 import images from "@/constants/images";
 import { Link } from "expo-router";
-import { Image, Text, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
@@ -35,6 +35,20 @@ export default function Index() {
    
      </View>
      <Search />
+     <View className="my-5 ">
+      <View className="flex flex-row items-center justify-between"> 
+        <Text>
+          Feature
+        </Text>
+        <TouchableOpacity>
+          <Text>
+            See all 
+          </Text>
+        </TouchableOpacity>
+
+      </View>
+
+     </View>
    </SafeAreaView>
   );
 }
