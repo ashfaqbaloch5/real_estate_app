@@ -31,6 +31,7 @@ const Explore = () => {
     params: {
       filter: params.filter!,
       query: params.query!,
+      limit: 40, 
     },
     skip: true,
   });
@@ -39,6 +40,7 @@ const Explore = () => {
     refetch({
       filter: params.filter!,
       query: params.query!,
+      limit: 40,
     });
   }, [params.filter, params.query]);
 

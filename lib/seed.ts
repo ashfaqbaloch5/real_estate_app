@@ -79,7 +79,7 @@ async function seed() {
         COLLECTIONS.AGENT!,
         ID.unique(),
         {
-          name: `Agent ${i} - ${Date.now()}`, // To avoid name duplication
+          name: `Agent ${i} - ${Date.now()}`,
           email: `agent${i}_${Date.now()}@example.com`,
           avatar: agentImages[Math.floor(Math.random() * agentImages.length)],
         }
@@ -119,47 +119,56 @@ async function seed() {
     }
     console.log(`Seeded ${galleries.length} galleries.`);
 
+    // Property types you want 10 each
+    const propertyTypes = [
+      "House",
+      "TownHouse",
+      "Condo",
+      "Duplex",
+      "Studio",
+      "Villa",
+      "Apartment",
+      "Other",
+    ];
+
     // Seed Properties
-    for (let i = 1; i <= 20; i++) {
-      const assignedAgent = agents[Math.floor(Math.random() * agents.length)];
-      const assignedReviews = getRandomSubset(reviews, 5, 7);
-      const assignedGalleries = getRandomSubset(galleries, 3, 8);
+    for (const type of propertyTypes) {
+      for (let i = 1; i <= 10; i++) {
+        const assignedAgent = agents[Math.floor(Math.random() * agents.length)];
+        const assignedReviews = getRandomSubset(reviews, 5, 7);
+        const assignedGalleries = getRandomSubset(galleries, 3, 8);
 
-      const selectedFacilities = facilities
-        .sort(() => 0.5 - Math.random())
-        .slice(0, Math.floor(Math.random() * facilities.length) + 1);
+        const selectedFacilities = facilities
+          .sort(() => 0.5 - Math.random())
+          .slice(0, Math.floor(Math.random() * facilities.length) + 1);
 
-      const image =
-        propertiesImages.length - 1 >= i
-          ? propertiesImages[i]
-          : propertiesImages[
-              Math.floor(Math.random() * propertiesImages.length)
-            ];
+        const randomImage = propertiesImages[Math.floor(Math.random() * propertiesImages.length)];
 
-      const property = await databases.createDocument(
-        config.databaseId!,
-        COLLECTIONS.PROPERTY!,
-        ID.unique(),
-        {
-          name: `Property ${i} - ${Date.now()}`,
-          type: propertyTypes[Math.floor(Math.random() * propertyTypes.length)],
-          description: `This is the description for Property ${i}.`,
-          address: `123 Property Street, City ${i}`,
-          geolocation: `192.168.1.${i}, 192.168.1.${i}`,
-          price: Math.floor(Math.random() * 9000) + 1000,
-          area: Math.floor(Math.random() * 3000) + 500,
-          bedrooms: Math.floor(Math.random() * 5) + 1,
-          bathrooms: Math.floor(Math.random() * 5) + 1,
-          rating: Math.floor(Math.random() * 5) + 1,
-          facilities: selectedFacilities,
-          image: image,
-          agent: assignedAgent.$id,
-          // reviews: assignedReviews.map((review) => review.$id), // still commented out
-          gallery: assignedGalleries.map((gallery) => gallery.$id),
-        }
-      );
+        const property = await databases.createDocument(
+          config.databaseId!,
+          COLLECTIONS.PROPERTY!,
+          ID.unique(),
+          {
+            name: `${type} ${i} - ${Date.now()}`,
+            type: type, // fixed: assign the specific type
+            description: `This is the description for ${type} ${i}.`,
+            address: `123 ${type} Street, City ${i}`,
+            geolocation: `192.168.1.${i}, 192.168.1.${i}`,
+            price: Math.floor(Math.random() * 9000) + 1000,
+            area: Math.floor(Math.random() * 3000) + 500,
+            bedrooms: Math.floor(Math.random() * 5) + 1,
+            bathrooms: Math.floor(Math.random() * 5) + 1,
+            rating: Math.floor(Math.random() * 5) + 1,
+            facilities: selectedFacilities,
+            image: randomImage,
+            agent: assignedAgent.$id,
+            // reviews: assignedReviews.map((review) => review.$id), // still commented out
+            gallery: assignedGalleries.map((gallery) => gallery.$id),
+          }
+        );
 
-      console.log(`Seeded property: ${property.name}`);
+        console.log(`Seeded property: ${property.name}`);
+      }
     }
 
     console.log("Data seeding completed.");
