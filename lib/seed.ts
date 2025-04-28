@@ -69,23 +69,7 @@ function getRandomSubset<T>(
 
 async function seed() {
   try {
-    // Clear existing data from all collections
-    for (const key in COLLECTIONS) {
-      const collectionId = COLLECTIONS[key as keyof typeof COLLECTIONS];
-      const documents = await databases.listDocuments(
-        config.databaseId!,
-        collectionId!
-      );
-      for (const doc of documents.documents) {
-        await databases.deleteDocument(
-          config.databaseId!,
-          collectionId!,
-          doc.$id
-        );
-      }
-    }
-
-    console.log("Cleared all existing data.");
+    console.log("Starting to seed new data without deleting existing ones...");
 
     // Seed Agents
     const agents = [];
@@ -95,8 +79,8 @@ async function seed() {
         COLLECTIONS.AGENT!,
         ID.unique(),
         {
-          name: `Agent ${i}`,
-          email: `agent${i}@example.com`,
+          name: `Agent ${i} - ${Date.now()}`, // To avoid name duplication
+          email: `agent${i}_${Date.now()}@example.com`,
           avatar: agentImages[Math.floor(Math.random() * agentImages.length)],
         }
       );
@@ -112,10 +96,10 @@ async function seed() {
         COLLECTIONS.REVIEWS!,
         ID.unique(),
         {
-          name: `Reviewer ${i}`,
+          name: `Reviewer ${i} - ${Date.now()}`,
           avatar: reviewImages[Math.floor(Math.random() * reviewImages.length)],
           review: `This is a review by Reviewer ${i}.`,
-          rating: Math.floor(Math.random() * 5) + 1, // Rating between 1 and 5
+          rating: Math.floor(Math.random() * 5) + 1,
         }
       );
       reviews.push(review);
@@ -133,15 +117,13 @@ async function seed() {
       );
       galleries.push(gallery);
     }
-
     console.log(`Seeded ${galleries.length} galleries.`);
 
     // Seed Properties
     for (let i = 1; i <= 20; i++) {
       const assignedAgent = agents[Math.floor(Math.random() * agents.length)];
-
-      const assignedReviews = getRandomSubset(reviews, 5, 7); // 5 to 7 reviews
-      const assignedGalleries = getRandomSubset(galleries, 3, 8); // 3 to 8 galleries
+      const assignedReviews = getRandomSubset(reviews, 5, 7);
+      const assignedGalleries = getRandomSubset(galleries, 3, 8);
 
       const selectedFacilities = facilities
         .sort(() => 0.5 - Math.random())
@@ -159,7 +141,7 @@ async function seed() {
         COLLECTIONS.PROPERTY!,
         ID.unique(),
         {
-          name: `Property ${i}`,
+          name: `Property ${i} - ${Date.now()}`,
           type: propertyTypes[Math.floor(Math.random() * propertyTypes.length)],
           description: `This is the description for Property ${i}.`,
           address: `123 Property Street, City ${i}`,
@@ -172,7 +154,7 @@ async function seed() {
           facilities: selectedFacilities,
           image: image,
           agent: assignedAgent.$id,
-        //   reviews: assignedReviews.map((review) => review.$id),
+          // reviews: assignedReviews.map((review) => review.$id), // still commented out
           gallery: assignedGalleries.map((gallery) => gallery.$id),
         }
       );

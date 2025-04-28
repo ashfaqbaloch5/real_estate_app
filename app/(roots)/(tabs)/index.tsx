@@ -24,7 +24,7 @@ export default function Index() {
     params:{
       filter: params.filter!,
       query: params.query!,
-      limit:6
+      limit:20
     },
     skip:true,
   
@@ -36,15 +36,15 @@ export default function Index() {
       refetch({
         filter: params.filter!,
         query: params.query!,
-        limit: 6
+        limit: 20
       })
   },[params.filter,params.query]);
   return (
    <SafeAreaView className="bg-white h-full">
-    
+    {/* <Button title="Seed" onPress={seed} /> */}
     <FlatList data={properties}
     renderItem={({ item }) => <Card item={item}  onPress={() => handleCardPress(item.$id)} />}
-    // keyExtractor={(item) => item.toString()}
+    keyExtractor={(item) => item.$id}
     numColumns={2}
     contentContainerClassName="pb-32"
     columnWrapperClassName="flex gap-5 px-5"
@@ -100,7 +100,7 @@ export default function Index() {
         <NoResults/>:(
       <FlatList data={latestProperties}
         renderItem={({ item }) => <FeaturedCard item={item}  onPress={() => handleCardPress(item.$id)} />}
-        // keyExtractor={(item) => item.toString()}
+        keyExtractor={(item) => item.$id}
         horizontal
         bounces={false}
         showsHorizontalScrollIndicator={false}
