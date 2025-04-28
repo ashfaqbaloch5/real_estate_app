@@ -167,9 +167,21 @@ import { Alert } from "react-native";
         config.propertiesCollectionId!,
         id
       );
-      return result;
+      return {
+        ...result,
+        reviews: result.reviews ?? [],    // default empty array if undefined
+        gallery: result.gallery ?? [],    // default empty array if undefined
+        facilities: result.facilities ?? [], // default empty array if undefined
+        agent: result.agent ?? {           // default agent object
+          avatar: '',
+          name: '',
+          email: '',
+        },
+      };
     } catch (error) {
       console.error(error);
       return null;
     }
   }
+  
+  
