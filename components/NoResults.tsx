@@ -1,21 +1,20 @@
 import React from "react";
 import { View, Text, Image } from "react-native";
-
 import images from "@/constants/images";
 
 const NoResults = () => {
   return (
-    <View className="flex items-center my-5">
+    <View className="flex-1 items-center justify-center px-5 mt-10 ">
       <Image
         source={images.noResult}
-        className="w-11/12 h-80"
+        className="w-80 h-80"
         resizeMode="contain"
       />
-      <Text className="text-2xl font-rubik-bold text-black-300 mt-5">
-        No Result
+      <Text className="text-2xl font-rubik-bold text-primary-300 mt-5">
+        No Results Found
       </Text>
-      <Text className="text-base text-black-100 mt-2">
-        We could not find any result
+      <Text className="text-base font-rubik text-gray-500 mt-2 text-center">
+        We couldn’t find any results for your search. Please try again.
       </Text>
     </View>
   );

@@ -1,5 +1,6 @@
 import { Card, FeaturedCard } from "@/components/Cards";
 import Filters from "@/components/Filters";
+import NoResults from "@/components/NoResults";
 import Search from "@/components/Search";
 import icons from "@/constants/icons";
 import images from "@/constants/images";
@@ -9,7 +10,7 @@ import seed from "@/lib/seed";
 import { useAppwrite } from "@/lib/useAppwrite";
 import { Link, router, useLocalSearchParams } from "expo-router";
 import { useEffect } from "react";
-import { Button, FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Button, FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
@@ -45,9 +46,15 @@ export default function Index() {
     renderItem={({ item }) => <Card item={item}  onPress={() => handleCardPress(item.$id)} />}
     // keyExtractor={(item) => item.toString()}
     numColumns={2}
-    contentContainerClassName="pb--32"
+    contentContainerClassName="pb-32"
     columnWrapperClassName="flex gap-5 px-5"
     showsVerticalScrollIndicator={false}
+    ListEmptyComponent=
+    {
+      loading ? (
+        <ActivityIndicator size="large" className="text-primary- mt-5" />
+      ): <NoResults/>
+    }
     ListHeaderComponent={
       <View className="px-5">
       <View className="flex flex-row items-center justify-between mt-5">
@@ -86,6 +93,11 @@ export default function Index() {
         </TouchableOpacity>
 
       </View>
+      {latestPropertiesloading? 
+        <ActivityIndicator size="large" 
+        className="text-primary-300" />
+      : !latestProperties || latestProperties.length===0 ? 
+        <NoResults/>:(
       <FlatList data={latestProperties}
         renderItem={({ item }) => <FeaturedCard item={item}  onPress={() => handleCardPress(item.$id)} />}
         // keyExtractor={(item) => item.toString()}
@@ -93,7 +105,7 @@ export default function Index() {
         bounces={false}
         showsHorizontalScrollIndicator={false}
         contentContainerClassName="flex gap-5 mt-3"
-      />
+      />)}
       </View>
 
       <View className="flex flex-row items-center justify-between"> 
