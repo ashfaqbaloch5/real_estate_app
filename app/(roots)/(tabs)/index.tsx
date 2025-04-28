@@ -30,7 +30,8 @@ export default function Index() {
   
   })
 
-  const handleCardPress = (id:string) => router.push('/properties/${id}');
+  const handleCardPress = (id: string) => router.push(`/properties/${id}`);
+
 
   useEffect(()=>{
       refetch({
@@ -43,7 +44,8 @@ export default function Index() {
    <SafeAreaView className="bg-white h-full">
     {/* <Button title="Seed" onPress={seed} /> */}
     <FlatList data={properties}
-    renderItem={({ item }) => <Card item={item}  onPress={() => handleCardPress(item.$id)} />}
+    renderItem={({ item }) => <Card item={item} onPress={() => handleCardPress(item.$id)} />}
+
     keyExtractor={(item) => item.$id}
     numColumns={2}
     contentContainerClassName="pb-32"
@@ -99,7 +101,7 @@ export default function Index() {
       : !latestProperties || latestProperties.length===0 ? 
         <NoResults/>:(
       <FlatList data={latestProperties}
-        renderItem={({ item }) => <FeaturedCard item={item}  onPress={() => handleCardPress(item.$id)} />}
+        renderItem={({ item }) => <FeaturedCard item={item} onPress={() => handleCardPress(item.$id)} />}
         keyExtractor={(item) => item.$id}
         horizontal
         bounces={false}
